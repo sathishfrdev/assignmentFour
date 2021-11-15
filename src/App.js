@@ -7,12 +7,14 @@ import 'antd/dist/antd.css';
 import { Layout, Menu, Breadcrumb } from 'antd';
 import { Card } from 'antd';
 import { Form, Input, Button, Checkbox } from 'antd';
-
+import { Image } from 'antd';
 import {
-  LikeOutlined,CommentOutlined ,SmileOutlined,HomeOutlined ,NotificationOutlined ,BellOutlined ,MailOutlined 
+  LikeOutlined,CommentOutlined ,SmileOutlined,HomeOutlined ,NotificationOutlined ,BellOutlined ,MailOutlined ,DislikeFilled,LikeFilled,DislikeOutlined
 } from '@ant-design/icons';
 // import Icon from '@ant-design/icons';
-
+import { Comment, Tooltip, Avatar } from 'antd';
+import moment from 'moment';
+// import { DislikeOutlined, LikeOutlined, DislikeFilled, LikeFilled } from '@ant-design/icons';
 const { Header, Content, Footer } = Layout;
 
 
@@ -58,35 +60,57 @@ function App() {
 // },[show])// did mount
 // const[show,setShow]=useState(true);
 
+// const [seconds, setSeconds] = useState(0);  //for loading ui or feed
+
+
+// useEffect(() => {
+//   const interval = setInterval(() => {
+//     setSeconds(seconds => seconds - 1);
+//   }, 1000);
+//   return () => clearInterval(interval);
+// }, []);
+
 const objects = [
   {
     "id": 1,
-    "company": "Photosnap",
-    "logo": "./image/user.png",
+    
+    "logo": "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
     "quotes":"Just when the caterpillar thought the world was ending, he turned into a butterfly."
 
   }
 ]
 
-
+//variable for date and month
 const time = null;
 const [datem,setDate] = useState(time);
 
+//variable for like counter
+const [count, setCount] = useState(0);
 
 
+//increment function
+
+const handleIncrement = () => {
+  setCount(prevCount => prevCount + 1);
+};
+
+//time function                   //learn moment
 const handelTime = () =>{
   let in_date  = new Date()
-  var str=in_date.getDate() +'/'+(in_date.getMonth()+1)
+  var str=in_date.getDate() +'/'+(in_date.getMonth()+1).toLocaleString('en-us', { month: 'long' });  //string convert the month
+  
   setDate(str);
   console.log("time",datem)
 }
 
 
-
+//post and feed variable
 
 const[name,setName]=useState("")
 const [list,setList]=useState([])
 
+
+//function form
 const handlesubmit=(e)=>{
   // e.preventDefault();
  //  console.log(name,mail)
@@ -102,15 +126,19 @@ const handlesubmit=(e)=>{
 
   return (
  <div>
-<Layout>
-    <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
+<Layout className="layout">
+    <Header style={{ position: 'fixed', zIndex: 1, width: '100%',color:'white' }}>
       <div className="logo" />
-      <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
+      <Menu theme="dark" mode="horizontal" style={{color:'white'}} defaultSelectedKeys={['2'] }>
         <Menu.Item key="1" > <HomeOutlined />        Home             </Menu.Item>
         <Menu.Item key="2"><BellOutlined />  Notification</Menu.Item>
         <Menu.Item key="3"><MailOutlined />    Messages</Menu.Item>
-       
+        
+        <Button type="primary" danger>
+      
+      </Button> 
       </Menu>
+      
     </Header>
     <Content className="site-layout" style={{ padding: '0 50px', marginTop: 64,marginLeft:500,marginRight:280 }}>
       
@@ -143,8 +171,10 @@ const handlesubmit=(e)=>{
   
   
   {
-    list.map((a)=><Card  title={a.name} style={{ width: 500 ,alignItems:'center',marginTop:20}}>   
-    
+    list.map((a)=><Card  title={a.name}   style={{ width: 500 ,alignItems:'center',marginTop:20}}>   
+    <p>
+      {datem}
+      </p>
       <p>
 
       {objects.map((data,key)=>{
@@ -152,26 +182,33 @@ const handlesubmit=(e)=>{
         
 return(
   
-<img  alt="images" key="key" src={data.logo} />
+
+<Image
+      width={200}
+      src={data.logo}
+    />
 
 
 )
 
 })}
 
-<br/>
+<br/><br/>
 
 <p>"Just when the caterpillar thought the world was ending, he turned into a butterfly."</p>
       </p>
-      <div className="icons-list">  <LikeOutlined />                <CommentOutlined /></div>
+      <div className="icons-list"> <br/><br/>
+       <LikeOutlined onClick={handleIncrement}/> {count}              <CommentOutlined /></div>
       </Card>  )
   }
 
 
       </div>
-   
+      {/* {seconds} */}
     </Content>
+    
     <Footer style={{ textAlign: 'center' }}>assignmentFOUR</Footer>
+    
   </Layout>
 
 
